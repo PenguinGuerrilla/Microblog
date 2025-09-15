@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
+use App\Services\ApiResponse;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\returnArgument;
 
 class UserController extends Controller
 {
@@ -16,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(User::all(), 200);
+        return ApiResponse::success(User::all());
     }
 
     /**
@@ -29,16 +31,10 @@ class UserController extends Controller
         try {
             $user = User::create($data);
             DB::commit();
-            return response()->json([
-                'message' => 'Usuário cadastrado com sucesso',
-                'data' => $user
-            ], 200);
+            return ApiResponse::success($user);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'message' => 'Erro ao cadastrar usuário',
-                'error' => $e
-            ], 200);
+            return ApiResponse::error('Erro ao cadastrar usuário');
         }
 
     }
@@ -50,13 +46,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if ($user) {
-            return response()->json([
-                $user
-            ], 200);
+            return ApiResponse::success($user);
         } else {
-            return response()->json([
-                'message' => 'Usuário não encontrado'
-            ], 404);
+            return ApiResponse::error('Usuário não encontrado');
         }
     }
 
@@ -75,16 +67,13 @@ class UserController extends Controller
             $user = User::find($id);
             $user->update($data);
             DB::commit();
-            return response()->json([
+            return ApiResponse::success([
                 'message' => 'Usuário atualizado com sucesso',
                 'data' => $user
-            ], 200);
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'message' => 'Erro ao atualizar usuário',
-                'error' => $e
-            ], 500);
+            return ApiResponse::error('Erro ao atualizar usuário');
         }
     }
 
@@ -99,15 +88,10 @@ class UserController extends Controller
             try {
                 $user->delete();
                 DB::commit();
-                return response()->json([
-                    'message' => 'Usuário excluído com sucesso'
-                ], 200);
+                return ApiResponse::success('Usuário excluído com sucesso');
             } catch (Exception $e) {
                 DB::rollBack();
-                return response()->json([
-                    'message' => 'Erro ao excluir o usuário',
-                    'error' => $e
-                ], 500);
+                return ApiResponse::error('Erro ao excluir o usuário');
             }
         } else {
             return response()->json([
