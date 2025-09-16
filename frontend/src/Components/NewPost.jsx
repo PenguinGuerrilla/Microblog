@@ -2,7 +2,7 @@ import { CircleUserRound } from 'lucide-react';
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../Contexts/AppContext';
 
-const NewPost = () => {
+const NewPost = ({ onNewPost }) => {
     const { token, user } = useContext(AppContext);
     const [formData, setFormData] = useState({
         conteudo: '',
@@ -46,6 +46,9 @@ const NewPost = () => {
                 throw new Error(errorMsg);
             }
             setFormData({ conteudo: '', publico: false }); // Reset form
+            if (onNewPost) {
+                onNewPost();
+            }
         } catch (error) {
             console.error("Submit Error:", error);
             alert(error.toString());

@@ -12,40 +12,41 @@ const Feed = () => {
   const { token } = useContext(AppContext)
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const url = token ? "/api/posts" : "/api/public-posts";
-      const headers = {
-        "Accept": "application/json",
-      };
-
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-
-      try {
-        const res = await fetch(url, {
-          method: 'GET',
-          headers: headers,
-        });
-        const result = await res.json();
-        if (!res.ok) {
-          let errorMsg = `API Error: ${res.statusText}`;
-          if (result && result.errors) {
-            errorMsg = Object.values(result.errors).flat().join(' ');
-          }
-          throw new Error(errorMsg);
-        }
-        if (result.data) {
-          setPosts(result.data);
-        } else {
-          console.warn("API response did not contain a 'data' property.", result);
-        }
-      } catch (error) {
-        console.error("Fetch Data Error:", error);
-        alert(error.toString());
-      }
+  const fetchPosts = async () => {
+    const url = token ? "/api/posts" : "/api/public-posts";
+    const headers = {
+      "Accept": "application/json",
     };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        let errorMsg = `API Error: ${res.statusText}`;
+        if (result && result.errors) {
+          errorMsg = Object.values(result.errors).flat().join(' ');
+        }
+        throw new Error(errorMsg);
+      }
+      if (result.data) {
+        setPosts(result.data);
+      } else {
+        console.warn("API response did not contain a 'data' property.", result);
+      }
+    } catch (error) {
+      console.error("Fetch Data Error:", error);
+      alert(error.toString());
+    }
+  };
+
+  useEffect(() => {
     fetchPosts();
   }, [token]);
 
@@ -60,7 +61,7 @@ const Feed = () => {
         <div className="w-full max-w-xl"> {/* Container for posts */}
           <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
 
-          {token && <NewPost token={token}/>}
+          {token && <NewPost token={token} onNewPost={fetchPosts}/>}
 
           {/* Feed of posts */}
           <div className="space-y-6">

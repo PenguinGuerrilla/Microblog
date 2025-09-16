@@ -44,8 +44,11 @@ const Header = ({ showAuthControls = false }) => {
   return (
     <header className="p-4 md:p-6 flex justify-between items-center border-b border-[#1a382e]">
       <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+        <img
+          src={"/logo.svg"}
+          className="w-5 h-5 rounded-full mt-2 mr-3"
+        />
         <span className="font-semibold text-lg md:text-xl">Microblog</span>
-        <ChevronDownIcon />
       </div>
       {showAuthControls && (
         <div className="flex items-center space-x-4">
@@ -55,12 +58,15 @@ const Header = ({ showAuthControls = false }) => {
           >
             {token ? "Logout" : "Login"}
           </button>
-          <div className="flex items-center space-x-4 ">
-            <img
-              src={user.gravatar}
-              alt={user.name}
-              className="w-10 h-10 rounded-full"
-            /></div>
+          {user &&
+            <div className="flex items-center space-x-4 ">
+              <img
+                src={user.gravatar}
+                alt={user.name}
+                className="w-10 h-10 rounded-full"
+              />
+            </div>
+          }
         </div>
       )}
     </header>
