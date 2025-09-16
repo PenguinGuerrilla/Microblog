@@ -19,9 +19,9 @@ class PostController extends Controller
     {
         try {
             if (auth()->user())
-                return ApiResponse::success(Post::all());
+                return ApiResponse::success(Post::with('user')->get());
             else
-                return ApiResponse::success(Post::where('publico', true));
+                return ApiResponse::success(Post::with('user')->where('publico', true)->get());
         } catch (Exception $e) {
             return ApiResponse::error('Erro ao buscar os posts: ' . $e);
         }
