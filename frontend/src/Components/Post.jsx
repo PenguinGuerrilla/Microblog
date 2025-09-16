@@ -17,9 +17,11 @@ const Post = ({post}) => {
     return (
         <div key={post.id} className="bg-[#1a382e] p-5 rounded-xl shadow-lg">
             <div className="flex items-start space-x-4">
-                {/* TODO: implementar gravatar */}
-                {/* <UserAvatar src={post.avatar} alt={post.author} size="md" /> */}
-                <CircleUserRound/>
+                <img
+                    src={post.user.gravatar ?? '/defaultPfp.svg'}
+                    alt={post.user.name}
+                    className="w-10 h-10 rounded-full"
+                />
                 <div className="flex-grow">
                     <div className="flex items-center justify-between mb-2">
                         <span className="font-semibold text-lg">{post.user.name}</span>

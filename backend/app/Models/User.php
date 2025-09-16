@@ -34,6 +34,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['gravatar'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -50,4 +52,11 @@ class User extends Authenticatable
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+    public function getGravatarAttribute(): string
+    {
+        $hash = md5(strtolower(trim($this->attributes['email'])));
+        return "https://www.gravatar.com/avatar/{$hash}?s=200&d=mp";
+    }
+
 }
