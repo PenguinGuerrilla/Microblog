@@ -1,9 +1,11 @@
 import { CircleUserRound } from 'lucide-react';
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../Contexts/AppContext';
+import LoaderPages from './LoaderPages/LoaderPages';
 
 const NewPost = ({ onNewPost }) => {
     const { token, user } = useContext(AppContext);
+    const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         conteudo: '',
         publico: false
@@ -26,6 +28,7 @@ const NewPost = ({ onNewPost }) => {
         };
 
         try {
+            setLoading(true)
             const res = await fetch('/api/posts', {
                 method: 'POST',
                 headers: {
@@ -52,10 +55,14 @@ const NewPost = ({ onNewPost }) => {
         } catch (error) {
             console.error("Submit Error:", error);
             alert(error.toString());
+        } finally{
+            setLoading(false)
         }
     };
 
     return (
+        <>
+        {loading && <LoaderPages/>}
         <form onSubmit={handleSubmit}>
             <div className="bg-[#1a382e] p-5 rounded-xl shadow-lg mb-8">
                 <div className="flex items-center space-x-4 mb-4">
@@ -90,6 +97,8 @@ const NewPost = ({ onNewPost }) => {
                 </div>
             </div>
         </form>
+        </>
+
     );
 };
 
