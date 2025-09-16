@@ -10,7 +10,7 @@ import NewPost from '../../Components/NewPost';
 import LoaderPages from '../../Components/LoaderPages/LoaderPages';
 
 const Feed = () => {
-  const { token } = useContext(AppContext)
+  const { token, user } = useContext(AppContext)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,7 +71,7 @@ const Feed = () => {
 
           <div className="space-y-6">
             {posts.map(post => (
-              <Post post={post} />
+              <Post key={post.id} post={post} user={user} onPostDeleted={fetchPosts}/>
             ))}
           </div>
         </div>
