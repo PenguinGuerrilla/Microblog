@@ -30,8 +30,7 @@ class AuthController extends Controller
         $token = $user->createToken($user->name, ['*'], now()->addHour())->plainTextToken;
 
         return ApiResponse::success([
-            'user' => $user->name,
-            'email' => $user->email,
+            'user' => $user,
             'token' => $token
         ]);
     }

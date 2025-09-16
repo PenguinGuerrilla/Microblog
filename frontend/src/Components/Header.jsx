@@ -50,10 +50,10 @@ const Header = ({ showAuthControls = false }) => {
       {showAuthControls && (
         <div className="flex items-center space-x-4">
           <button
-            onClick={handleLogout}
+            onClick={token ? handleLogout : () => navigate('/login')}
             className="px-4 py-2 bg-[#1a382e] hover:bg-[#2a4a3e] rounded-full text-[#e0f2e9] text-sm font-medium transition-colors duration-300"
           >
-            Logout
+            {token ? "Logout" : "Login"}
           </button>
           <CircleUserRound/>
           {/* <UserAvatar src="https://via.placeholder.com/150/6ee7b7/122a21?text=ME" alt="Your Avatar" size="md" /> */}

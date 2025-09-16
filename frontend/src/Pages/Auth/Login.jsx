@@ -26,7 +26,7 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
-    const { setToken } = useContext(AppContext);
+    const { setToken, setUser } = useContext(AppContext);
     const { navigate } = useContext(NavigationContext);
     
     const [formData, setFormData] = useState({
@@ -82,6 +82,7 @@ const LoginPage = () => {
                 console.log('API Response:', result);
                 console.log('Token from API:', result.data.token);
                 setToken(result.data.token);
+                setUser(result.data.user);
 
                 toast.success((result.message || "Autenticado com sucesso!") + " Redirecionando a página...", {
                     closeOnClick: true,
