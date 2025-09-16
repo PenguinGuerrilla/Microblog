@@ -3,6 +3,7 @@ import UserAvatar from './UserAvatar';
 import { NavigationContext } from '../Contexts/NavigationContext';
 import { AppContext } from '../Contexts/AppContext';
 import { toast } from 'react-toastify';
+import { CircleUserRound } from 'lucide-react';
 
 const ChevronDownIcon = () => (
   <svg
@@ -54,7 +55,8 @@ const Header = ({ showAuthControls = false }) => {
           >
             Logout
           </button>
-          <UserAvatar src="https://via.placeholder.com/150/6ee7b7/122a21?text=ME" alt="Your Avatar" size="md" />
+          <CircleUserRound/>
+          {/* <UserAvatar src="https://via.placeholder.com/150/6ee7b7/122a21?text=ME" alt="Your Avatar" size="md" /> */}
         </div>
       )}
     </header>
