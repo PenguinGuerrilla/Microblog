@@ -7,10 +7,12 @@ import Header from '../../Components/Header';
 import Post from '../../Components/Post';
 import { AppContext } from '../../Contexts/AppContext';
 import NewPost from '../../Components/NewPost';
+import LoaderPages from '../../Components/LoaderPages/LoaderPages';
 
 const Feed = () => {
   const { token } = useContext(AppContext)
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchPosts = async () => {
     const url = token ? "/api/posts" : "/api/public-posts";
@@ -23,6 +25,7 @@ const Feed = () => {
     }
 
     try {
+      setLoading(true);
       const res = await fetch(url, {
         method: 'GET',
         headers: headers,
@@ -43,6 +46,8 @@ const Feed = () => {
     } catch (error) {
       console.error("Fetch Data Error:", error);
       alert(error.toString());
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -53,17 +58,17 @@ const Feed = () => {
 
 
   return (
+    <>
+    {loading && <LoaderPages/>}
     <div className="bg-[#122117] min-h-screen flex flex-col font-sans text-[#e0f2e9]">
       <Header showAuthControls={true} />
 
-      {/* Main Content Area */}
       <main className="flex-grow flex justify-center p-4 md:p-6">
         <div className="w-full max-w-xl"> {/* Container for posts */}
           <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
 
-          {token && <NewPost token={token} onNewPost={fetchPosts}/>}
+          {token && <NewPost token={token} onNewPost={fetchPosts} />}
 
-          {/* Feed of posts */}
           <div className="space-y-6">
             {posts.map(post => (
               <Post post={post} />
@@ -72,6 +77,7 @@ const Feed = () => {
         </div>
       </main>
     </div>
+            </>
   );
 };
 

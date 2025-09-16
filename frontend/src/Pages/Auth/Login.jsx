@@ -3,21 +3,7 @@ import { AppContext } from '../../Contexts/AppContext';
 import { NavigationContext } from '../../Contexts/NavigationContext';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
-
-// Re-usable ChevronDownIcon for the header
-const ChevronDownIcon = () => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-4 w-4 ml-1"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-    >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-);
-
+import LoaderPages from '../../Components/LoaderPages/LoaderPages';
 import Header from '../../Components/Header';
 
 const loginSchema = z.object({
@@ -35,28 +21,30 @@ const LoginPage = () => {
     });
     
     const [errors, setErrors] = useState({});
+
+    const [loading, setLoading] = useState(false);
     
     const handleLogin = async (e) => {
         e.preventDefault();
-
         const validation = loginSchema.safeParse(formData);
-
+        
         if (!validation.success) {
             const formattedErrors = validation.error.flatten().fieldErrors;
             setErrors(formattedErrors);
-
+            
             Object.values(formattedErrors).forEach(fieldErrors => {
                 if (fieldErrors) {
                     fieldErrors.forEach(err => toast.error(err));
                 }
             });
-
+            
             return;
         }
-
+        
         setErrors({});
-
+        
         try {
+            setLoading(true);
             const res = await fetch('/api/login', {
                 method: 'post',
                 headers: {
@@ -84,7 +72,7 @@ const LoginPage = () => {
                 setToken(result.data.token);
                 setUser(result.data.user);
 
-                toast.success((result.message || "Autenticado com sucesso!") + " Redirecionando a página...", {
+                toast.success(("Autenticado com sucesso!") + " Redirecionando a página...", {
                     closeOnClick: true,
                     autoClose: 1500,
                 });
@@ -93,6 +81,8 @@ const LoginPage = () => {
             }
         } catch (error) {
             toast.error(error.toString());
+        } finally{
+            setLoading(false)
         }
     };
 
@@ -108,10 +98,10 @@ const LoginPage = () => {
     };
 
     return (
+        <>
+        {loading && <LoaderPages/>}
         <div className="bg-[#122117] min-h-screen flex flex-col font-sans text-white ">
             <Header showAuthControls={false} />
-
-            {/* Main Content */}
             <main className="flex-grow flex items-center justify-center w-full">
                 <div className="w-full max-w-sm px-4">
                     <div className="text-center mb-10">
@@ -162,6 +152,8 @@ const LoginPage = () => {
                 </div>
             </main>
         </div>
+        </>
+
     );
 };
 

@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import UserAvatar from './UserAvatar';
 import { NavigationContext } from '../Contexts/NavigationContext';
 import { AppContext } from '../Contexts/AppContext';
 import { toast } from 'react-toastify';
 import { CircleUserRound } from 'lucide-react';
+import LoaderPages from './LoaderPages/LoaderPages';
 
 const ChevronDownIcon = () => (
   <svg
@@ -21,10 +22,11 @@ const ChevronDownIcon = () => (
 const Header = ({ showAuthControls = false }) => {
   const { navigate } = useContext(NavigationContext);
   const { user, token, setToken } = useContext(AppContext);
-
+  const [loading, setLoading] = useState(false);
 
   async function handleLogout() {
     try {
+      setLoading(true)
       await fetch('/api/logout', {
         method: 'post',
         headers: {
@@ -38,10 +40,14 @@ const Header = ({ showAuthControls = false }) => {
       navigate('/login');
     } catch (error) {
       toast.error(error.toString());
+    } finally{
+      setLoading(false)
     }
   }
 
   return (
+    <>
+    {loading && <LoaderPages/>}
     <header className="p-4 md:p-6 flex justify-between items-center border-b border-[#1a382e]">
       <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
         <img
@@ -70,6 +76,8 @@ const Header = ({ showAuthControls = false }) => {
         </div>
       )}
     </header>
+    </>
+
   );
 };
 
