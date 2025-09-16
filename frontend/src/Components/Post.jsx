@@ -18,7 +18,7 @@ const Post = ({post}) => {
         <div key={post.id} className="bg-[#1a382e] p-5 rounded-xl shadow-lg">
             <div className="flex items-start space-x-4">
                 <img
-                    src={post.user.gravatar ?? '/defaultPfp.svg'}
+                    src={post.user.gravatar}
                     alt={post.user.name}
                     className="w-10 h-10 rounded-full"
                 />

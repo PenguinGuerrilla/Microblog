@@ -56,7 +56,11 @@ const NewPost = () => {
         <form onSubmit={handleSubmit}>
             <div className="bg-[#1a382e] p-5 rounded-xl shadow-lg mb-8">
                 <div className="flex items-center space-x-4 mb-4">
-                    <CircleUserRound />
+                    <img
+                    src={user.gravatar}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full"
+                />
                     <textarea
                         name="conteudo"
                         value={formData.conteudo}

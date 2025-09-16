@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import UserAvatar from './UserAvatar';
 import { NavigationContext } from '../Contexts/NavigationContext';
 import { AppContext } from '../Contexts/AppContext';
@@ -20,7 +20,7 @@ const ChevronDownIcon = () => (
 
 const Header = ({ showAuthControls = false }) => {
   const { navigate } = useContext(NavigationContext);
-  const { token, setToken } = useContext(AppContext);
+  const { user, token, setToken } = useContext(AppContext);
 
 
   async function handleLogout() {
@@ -55,8 +55,12 @@ const Header = ({ showAuthControls = false }) => {
           >
             {token ? "Logout" : "Login"}
           </button>
-          <CircleUserRound/>
-          {/* <UserAvatar src="https://via.placeholder.com/150/6ee7b7/122a21?text=ME" alt="Your Avatar" size="md" /> */}
+          <div className="flex items-center space-x-4 ">
+            <img
+              src={user.gravatar}
+              alt={user.name}
+              className="w-10 h-10 rounded-full"
+            /></div>
         </div>
       )}
     </header>
