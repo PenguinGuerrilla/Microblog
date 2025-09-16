@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
+use App\Models\User;
 use App\Services\ApiResponse;
+use Exception;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -31,6 +34,19 @@ class AuthController extends Controller
             'email' => $user->email,
             'token' => $token
         ]);
+    }
+
+    public function register(UserStoreRequest $request){
+        $data = $request->validated();
+        DB::beginTransaction();
+        try {
+            $user = User::create($data);
+            DB::commit();
+            return ApiResponse::success($user);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return ApiResponse::error('Erro ao cadastrar usuário');
+        }
     }
 
     public function logout(Request $request){
