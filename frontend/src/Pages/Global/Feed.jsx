@@ -13,15 +13,20 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
+      const url = token ? "/api/posts" : "/api/public-posts";
+      const headers = {
+        "Accept": "application/json",
+      };
 
-        const res = await fetch('/api/posts', {
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      try {
+        const res = await fetch(url, {
           method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json"
-          }
-        })
+          headers: headers,
+        });
         const result = await res.json();
         if (!res.ok) {
           let errorMsg = `API Error: ${res.statusText}`;
@@ -32,8 +37,6 @@ const Feed = () => {
         }
         if (result.data) {
           setPosts(result.data);
-          console.log("posts")
-          console.log(posts)
         } else {
           console.warn("API response did not contain a 'data' property.", result);
         }
@@ -41,10 +44,9 @@ const Feed = () => {
         console.error("Fetch Data Error:", error);
         alert(error.toString());
       }
-
-    }
-    fetchPosts()
-  },[token])
+    };
+    fetchPosts();
+  }, [token]);
 
 
 

@@ -15,13 +15,17 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function publicPosts()
+    {
+        return ApiResponse::success(Post::with('user')->where('publico', true)->get());
+    }
+
     public function index()
     {
         try {
             if (auth()->user())
                 return ApiResponse::success(Post::with('user')->get());
-            else
-                return ApiResponse::success(Post::with('user')->where('publico', true)->get());
         } catch (Exception $e) {
             return ApiResponse::error('Erro ao buscar os posts: ' . $e);
         }
@@ -92,13 +96,13 @@ class PostController extends Controller
         $post = Post::find($id);
         if ($post->user_id != auth()->user()->id)
             return ApiResponse::error("Erro ao excluir post");
-        else{
+        else {
             DB::beginTransaction();
-            try{
+            try {
                 Post::find($id)->delete();
                 DB::commit();
                 return ApiResponse::success("Post excluído com sucesso");
-            }catch(Exception $e){
+            } catch (Exception $e) {
                 DB::rollBack();
                 return ApiResponse::error("Erro ao excluir post");
             }

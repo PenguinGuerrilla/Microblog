@@ -18,6 +18,6 @@ Route::middleware('auth:sanctum')->group(function (){
 });
 
 // GUEST ROUTES
-
+Route::get('/public-posts',[PostController::class, 'publicPosts']);
 Route::post('register',[AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
