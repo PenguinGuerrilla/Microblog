@@ -1,11 +1,13 @@
 import { Pencil, Trash2Icon } from 'lucide-react';
 import React, { useState, useContext } from 'react';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import EditPostModal from './EditPostModal';
 import { AppContext } from '../Contexts/AppContext';
 import { toast } from 'react-toastify';
 
-const Post = ({ post, user, onPostDeleted }) => {
-    const [isModalOpen, setModalOpen] = useState(false);
+const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
     const { token } = useContext(AppContext);
 
     const timeAgo = (dateString) => {
@@ -39,13 +41,8 @@ const Post = ({ post, user, onPostDeleted }) => {
         }
     };
 
-    const handleDeleteClick = () => {
-        setModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalOpen(false);
-    };
+    const handleDeleteClick = () => setDeleteModalOpen(true);
+    const handleCloseDeleteModal = () => setDeleteModalOpen(false);
 
     const handleConfirmDelete = async () => {
         if (!token) {
@@ -74,7 +71,47 @@ const Post = ({ post, user, onPostDeleted }) => {
         } catch (error) {
             toast.error("Error deleting post: " + error.message);
         } finally {
-            setModalOpen(false);
+            setDeleteModalOpen(false);
+        }
+    };
+
+    const handleEditClick = () => setEditModalOpen(true);
+    const handleCloseEditModal = () => setEditModalOpen(false);
+
+    const handleSaveEdit = async (newContent, newPublico) => {
+        if (!token) {
+            toast.error("Authentication token not found.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/posts/${post.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    conteudo: newContent,
+                    publico: newPublico,
+                    user_id: user.id
+                }),
+            });
+
+            if (response.ok) {
+                toast.success("Post updated successfully");
+                if (onPostUpdated) {
+                    onPostUpdated();
+                }
+            } else {
+                const errorData = await response.json();
+                toast.error(errorData.message || "Failed to update post");
+            }
+        } catch (error) {
+            toast.error("Error updating post: " + error.message);
+        } finally {
+            setEditModalOpen(false);
         }
     };
 
@@ -88,13 +125,13 @@ const Post = ({ post, user, onPostDeleted }) => {
                         className="w-10 h-10 rounded-full"
                     />
                     <div className="flex-grow">
-                        <div className="flex items-center justify-start mb-2">
-                            <span className="font-semibold text-lg mr-3">{post.user.name}</span>
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="font-semibold text-lg">{post.user.name}</span>
                             <div className="flex items-center space-x-3">
                                 <span className="text-sm text-gray-400">{timeAgo(post.created_at)}</span>
-                                {user.id == post.user.id ?
+                                {user && user.id == post.user.id ?
                                     <div className="flex items-center space-x-2">
-                                        <div className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
+                                        <div onClick={handleEditClick} className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
                                             <Pencil size={16} />
                                         </div>
                                         <div onClick={handleDeleteClick} className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
@@ -109,9 +146,16 @@ const Post = ({ post, user, onPostDeleted }) => {
                 </div>
             </div>
             <DeleteConfirmationModal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
+                isOpen={isDeleteModalOpen}
+                onClose={handleCloseDeleteModal}
                 onConfirm={handleConfirmDelete}
+            />
+            <EditPostModal
+                isOpen={isEditModalOpen}
+                onClose={handleCloseEditModal}
+                onSave={handleSaveEdit}
+                postContent={post.conteudo}
+                isPublic={post.publico}
             />
         </>
     )

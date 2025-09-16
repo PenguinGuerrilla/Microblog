@@ -71,7 +71,7 @@ const Feed = () => {
 
           <div className="space-y-6">
             {posts.map(post => (
-              <Post key={post.id} post={post} user={user} onPostDeleted={fetchPosts}/>
+              <Post key={post.id} post={post} user={user} onPostDeleted={fetchPosts} onPostUpdated={fetchPosts}/>
             ))}
           </div>
         </div>
