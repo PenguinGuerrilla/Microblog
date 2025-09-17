@@ -13,7 +13,7 @@ import { NavigationContext } from '../../Contexts/NavigationContext';
 import handleLogout from '../../Utils/handleLogout';
 const Feed = () => {
   const { navigate } = useContext(NavigationContext);
-    const { token, setToken } = useContext(AppContext);
+  const { token, setToken, user } = useContext(AppContext);
 
 
   const [posts, setPosts] = useState([]);
@@ -40,7 +40,7 @@ const Feed = () => {
         console.log(res)
         if (res.status == 401) {
           toast.info("Sessão expirada, recarregando a página...")
-          handleLogout(setLoading,token,setToken,navigate)
+          handleLogout(setLoading, token, setToken, navigate)
         } else {
 
           let errorMsg = `API Error: ${res.statusText}`;
@@ -76,14 +76,14 @@ const Feed = () => {
         <Header showAuthControls={true} />
 
         <main className="flex-grow flex justify-center p-4 md:p-6">
-          <div className="w-full max-w-xl"> {/* Container for posts */}
+          <div className="w-full max-w-xl">
             <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
 
             {token && <NewPost token={token} onNewPost={fetchPosts} />}
 
             <div className="space-y-6">
               {posts.map(post => (
-                <Post post={post} />
+                <Post key={post.id} post={post} user={user} onPostDeleted={fetchPosts} onPostUpdated={fetchPosts} />
               ))}
             </div>
           </div>

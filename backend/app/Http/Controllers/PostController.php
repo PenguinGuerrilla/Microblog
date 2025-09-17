@@ -18,14 +18,14 @@ class PostController extends Controller
 
     public function publicPosts()
     {
-        return ApiResponse::success(Post::with('user')->where('publico', true)->get());
+        return ApiResponse::success(Post::with('user')->where('publico', true)->orderByDesc('created_at')->get());
     }
 
     public function index()
     {
         try {
             if (auth()->user())
-                return ApiResponse::success(Post::with('user')->get());
+                return ApiResponse::success(Post::with('user')->orderByDesc('created_at')->get());
         } catch (Exception $e) {
             return ApiResponse::error('Erro ao buscar os posts: ' . $e);
         }
