@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import Feed from './Pages/Global/Feed'
 import Registro from './Pages/Auth/Registro/Registro'
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme="dark"
       />
       <Routes>
         <Route path='/login' index element={<Login />} />
