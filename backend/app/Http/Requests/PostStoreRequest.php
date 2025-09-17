@@ -24,7 +24,8 @@ class PostStoreRequest extends FormRequest
         return [
             "conteudo" => "required|string|max:280",
             "publico" => "required|boolean",
-            "user_id" => "required|exists:users,id"
+            "user_id" => "required|exists:users,id",
+            "imagem" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048"
         ];
     }
 }

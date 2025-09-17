@@ -37,12 +37,21 @@ class PostController extends Controller
     public function store(PostStoreRequest $request)
     {
         $data = $request->validated();
-        // dd($data['user_id']);
         if ($data['user_id'] != auth()->user()->id)
             return ApiResponse::error("Erro ao cadastrar post");
+
         DB::beginTransaction();
         try {
             $post = Post::create($data);
+            if($data['imagem']){
+                $file = $data['imagem'];
+                if($data['publico']){
+                    $path = $file->store('images', 'public');
+                }else{
+                    $path = $file->store('images');
+                }
+                $post->images()->create(["path" => $path]);
+            }
             DB::commit();
             return ApiResponse::success($post);
         } catch (Exception $e) {

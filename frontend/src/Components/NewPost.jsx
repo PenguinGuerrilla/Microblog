@@ -1,15 +1,34 @@
-import { CircleUserRound } from 'lucide-react';
-import React, { useState, useContext } from 'react';
+import { ImagePlus, X } from 'lucide-react';
+import React, { useState, useContext, useRef } from 'react';
 import { AppContext } from '../Contexts/AppContext';
 import LoaderPages from './LoaderPages/LoaderPages';
 
 const NewPost = ({ onNewPost }) => {
     const { token, user } = useContext(AppContext);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         conteudo: '',
-        publico: false
+        publico: false,
+        imagem: null
     });
+    const [preview, setPreview] = useState(null);
+    const imageInputRef = useRef(null);
+
+    const handleImageChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setFormData(prev => ({ ...prev, imagem: file }));
+            setPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const removeImage = () => {
+        setFormData(prev => ({ ...prev, imagem: null }));
+        setPreview(null);
+        if (imageInputRef.current) {
+            imageInputRef.current.value = '';
+        }
+    };
 
     const handleChangeAttr = (attr, value) => {
         setFormData(prev => ({ ...prev, [attr]: value }));
@@ -22,21 +41,23 @@ const NewPost = ({ onNewPost }) => {
             return;
         }
 
-        const dataToSubmit = {
-            ...formData,
-            user_id: user.id
-        };
+        const dataToSubmit = new FormData();
+        dataToSubmit.append('conteudo', formData.conteudo);
+        dataToSubmit.append('publico', formData.publico ? '1' : '0');
+        dataToSubmit.append('user_id', user.id);
+        if (formData.imagem) {
+            dataToSubmit.append('imagem', formData.imagem);
+        }
 
         try {
-            setLoading(true)
+            setLoading(true);
             const res = await fetch('/api/posts', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
-                body: JSON.stringify(dataToSubmit)
+                body: dataToSubmit
             });
 
             const result = await res.json();
@@ -48,15 +69,19 @@ const NewPost = ({ onNewPost }) => {
                 }
                 throw new Error(errorMsg);
             }
-            setFormData({ conteudo: '', publico: false }); // Reset form
+            setFormData({ conteudo: '', publico: false, imagem: null });
+            setPreview(null);
+            if (imageInputRef.current) {
+                imageInputRef.current.value = '';
+            }
             if (onNewPost) {
                 onNewPost();
             }
         } catch (error) {
             console.error("Submit Error:", error);
             alert(error.toString());
-        } finally{
-            setLoading(false)
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -70,7 +95,7 @@ const NewPost = ({ onNewPost }) => {
                     src={user.gravatar}
                     alt={user.name}
                     className="w-10 h-10 rounded-full"
-                />
+                    />
                     <textarea
                         name="conteudo"
                         value={formData.conteudo}
@@ -81,12 +106,39 @@ const NewPost = ({ onNewPost }) => {
                         maxLength="280"
                     ></textarea>
                 </div>
+
+                {preview && (
+                    <div className="relative mb-4">
+                        <img src={preview} alt="Preview" className="rounded-lg max-h-60 w-full object-cover" />
+                        <button
+                            type="button"
+                            onClick={removeImage}
+                            className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-1 text-white hover:bg-opacity-75"
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+                )}
+
                 <div className="flex items-center justify-between pt-4 border-t border-[#2a4a3e]">
-                    <div className="flex items-center space-x-2 text-sm text-gray-400">
-                        <span>Postagem pública</span>
-                        <div onClick={() => handleChangeAttr('publico', !formData.publico)} className="w-10 h-5 flex items-center bg-[#2a4a3e] rounded-full p-1 cursor-pointer">
-                            <div className={`w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${formData.publico ? 'bg-[#6ee7b7] translate-x-full' : 'bg-gray-400'}`}></div>
+                    <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 text-sm text-gray-400">
+                            <span>Postagem pública</span>
+                            <div onClick={() => handleChangeAttr('publico', !formData.publico)} className="w-10 h-5 flex items-center bg-[#2a4a3e] rounded-full p-1 cursor-pointer">
+                                <div className={`w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${formData.publico ? 'bg-[#6ee7b7] translate-x-full' : 'bg-gray-400'}`}></div>
+                            </div>
                         </div>
+                        <label htmlFor="image-upload" className="cursor-pointer p-2 rounded-full hover:bg-[#2a4a3e] transition-colors">
+                            <ImagePlus className="w-5 h-5 text-[#6ee7b7]" />
+                        </label>
+                        <input
+                            id="image-upload"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            ref={imageInputRef}
+                            onChange={handleImageChange}
+                        />
                     </div>
                     <div className="flex items-center space-x-4">
                         <span className="text-sm text-gray-400">{formData.conteudo.length}/280</span>
@@ -98,7 +150,6 @@ const NewPost = ({ onNewPost }) => {
             </div>
         </form>
         </>
-
     );
 };
 

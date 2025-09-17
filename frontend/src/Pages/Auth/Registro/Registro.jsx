@@ -1,14 +1,11 @@
 import { AppContext } from "../../../Contexts/AppContext";
 import { useContext, useState } from "react";
-import { toast } from "react-toastify";
-import { registerSchema } from "../../../Utils/Schemas/registroSchema";
 import { NavigationContext } from "../../../Contexts/NavigationContext";
 
 
 
 import Header from "../../../Components/Header";
 import LoaderPages from "../../../Components/LoaderPages/LoaderPages";
-import handleLogin from "../../../Utils/handleLogin";
 import handleRegister from "../../../Utils/handleRegister";
 
 export default function Registro() {
