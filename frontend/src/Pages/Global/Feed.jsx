@@ -8,9 +8,14 @@ import Post from '../../Components/Post';
 import { AppContext } from '../../Contexts/AppContext';
 import NewPost from '../../Components/NewPost';
 import LoaderPages from '../../Components/LoaderPages/LoaderPages';
-
+import { toast } from 'react-toastify';
+import { NavigationContext } from '../../Contexts/NavigationContext';
+import handleLogout from '../../Utils/handleLogout';
 const Feed = () => {
-  const { token } = useContext(AppContext)
+  const { navigate } = useContext(NavigationContext);
+    const { token, setToken } = useContext(AppContext);
+
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -32,11 +37,18 @@ const Feed = () => {
       });
       const result = await res.json();
       if (!res.ok) {
-        let errorMsg = `API Error: ${res.statusText}`;
-        if (result && result.errors) {
-          errorMsg = Object.values(result.errors).flat().join(' ');
+        console.log(res)
+        if (res.status == 401) {
+          toast.info("Sessão expirada, recarregando a página...")
+          handleLogout(setLoading,token,setToken,navigate)
+        } else {
+
+          let errorMsg = `API Error: ${res.statusText}`;
+          if (result && result.errors) {
+            errorMsg = Object.values(result.errors).flat().join(' ');
+          }
+          throw new Error(errorMsg);
         }
-        throw new Error(errorMsg);
       }
       if (result.data) {
         setPosts(result.data);
@@ -46,7 +58,7 @@ const Feed = () => {
     } catch (error) {
       console.error("Fetch Data Error:", error);
       alert(error.toString());
-    } finally{
+    } finally {
       setLoading(false)
     }
   };
@@ -59,25 +71,25 @@ const Feed = () => {
 
   return (
     <>
-    {loading && <LoaderPages/>}
-    <div className="bg-[#122117] min-h-screen flex flex-col font-sans text-[#e0f2e9]">
-      <Header showAuthControls={true} />
+      {loading && <LoaderPages />}
+      <div className="bg-[#122117] min-h-screen flex flex-col font-sans text-[#e0f2e9]">
+        <Header showAuthControls={true} />
 
-      <main className="flex-grow flex justify-center p-4 md:p-6">
-        <div className="w-full max-w-xl"> {/* Container for posts */}
-          <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
+        <main className="flex-grow flex justify-center p-4 md:p-6">
+          <div className="w-full max-w-xl"> {/* Container for posts */}
+            <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
 
-          {token && <NewPost token={token} onNewPost={fetchPosts} />}
+            {token && <NewPost token={token} onNewPost={fetchPosts} />}
 
-          <div className="space-y-6">
-            {posts.map(post => (
-              <Post post={post} />
-            ))}
+            <div className="space-y-6">
+              {posts.map(post => (
+                <Post post={post} />
+              ))}
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
-            </>
+        </main>
+      </div>
+    </>
   );
 };
 

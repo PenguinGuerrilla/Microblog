@@ -5,6 +5,7 @@ import { AppContext } from '../Contexts/AppContext';
 import { toast } from 'react-toastify';
 import { CircleUserRound } from 'lucide-react';
 import LoaderPages from './LoaderPages/LoaderPages';
+import handleLogout from '../Utils/handleLogout';
 
 const ChevronDownIcon = () => (
   <svg
@@ -24,27 +25,6 @@ const Header = ({ showAuthControls = false }) => {
   const { user, token, setToken } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
 
-  async function handleLogout() {
-    try {
-      setLoading(true)
-      await fetch('/api/logout', {
-        method: 'post',
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": 'Application-json'
-        }
-      });
-
-      toast.success('Sessão encerrada.');
-      setToken(null);
-      navigate('/login');
-    } catch (error) {
-      toast.error(error.toString());
-    } finally{
-      setLoading(false)
-    }
-  }
-
   return (
     <>
     {loading && <LoaderPages/>}
@@ -59,7 +39,7 @@ const Header = ({ showAuthControls = false }) => {
       {showAuthControls && (
         <div className="flex items-center space-x-4">
           <button
-            onClick={token ? handleLogout : () => navigate('/login')}
+            onClick={token ? () => handleLogout(setLoading,token,setToken,navigate) : () => navigate('/login')}
             className="px-4 py-2 bg-[#1a382e] hover:bg-[#2a4a3e] rounded-full text-[#e0f2e9] text-sm font-medium transition-colors duration-300"
           >
             {token ? "Logout" : "Login"}
