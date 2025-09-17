@@ -19,20 +19,26 @@ class PostController extends Controller
 
     public function publicPosts()
     {
-        return ApiResponse::success(Post::with('user')->where('publico', true)->orderByDesc('created_at')->get());
+        $posts = Post::with('user', 'images')->where('publico', true)->orderByDesc('created_at')->get();
+        $posts->each(function($post){
+            if($post->images->isNotEmpty()){
+                $post->image = $post->images->first();
+            }
+            unset($post->images);
+        });
+        return ApiResponse::success($posts);
     }
 
     public function index()
     {
         try {
             if (auth()->user()){
-                $posts = Post::with('user')->orderByDesc('created_at')->get();
-                $posts->map(function($post){
-                    $image = PostImage::where('post_id',$post->id)->first();
-                    if($image){
-                        $post->image = $image;
-                        return $post;
+                $posts = Post::with('user', 'images')->orderByDesc('created_at')->get();
+                $posts->each(function($post){
+                    if($post->images->isNotEmpty()){
+                        $post->image = $post->images->first();
                     }
+                    unset($post->images);
                 });
                 return ApiResponse::success($posts);
             }

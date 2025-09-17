@@ -78,6 +78,8 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
     const handleEditClick = () => setEditModalOpen(true);
     const handleCloseEditModal = () => setEditModalOpen(false);
 
+    if(post.image) console.log(post.image.url)
+
     const handleSaveEdit = async (newContent, newPublico) => {
         if (!token) {
             toast.error("Authentication token not found.");
@@ -142,7 +144,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                             </div>
                         </div>
                         <p className="text-[#e0f2e9] text-start">{post.conteudo}</p>
-                        {post.image && <span>imagemmmmm</span>}
+                        {post.image && <img src={post.image.url} alt="Post image" className="mt-4 rounded-lg max-w-full h-auto" />}
                     </div>
                 </div>
             </div>
