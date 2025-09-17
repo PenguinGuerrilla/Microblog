@@ -142,6 +142,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                             </div>
                         </div>
                         <p className="text-[#e0f2e9] text-start">{post.conteudo}</p>
+                        {post.image && <span>imagemmmmm</span>}
                     </div>
                 </div>
             </div>

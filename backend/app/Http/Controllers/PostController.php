@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
+use App\Models\PostImage;
 use App\Services\ApiResponse;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,8 +25,17 @@ class PostController extends Controller
     public function index()
     {
         try {
-            if (auth()->user())
-                return ApiResponse::success(Post::with('user')->orderByDesc('created_at')->get());
+            if (auth()->user()){
+                $posts = Post::with('user')->orderByDesc('created_at')->get();
+                $posts->map(function($post){
+                    $image = PostImage::where('post_id',$post->id)->first();
+                    if($image){
+                        $post->image = $image;
+                        return $post;
+                    }
+                });
+                return ApiResponse::success($posts);
+            }
         } catch (Exception $e) {
             return ApiResponse::error('Erro ao buscar os posts: ' . $e);
         }
