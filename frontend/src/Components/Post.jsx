@@ -47,7 +47,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
 
     const handleConfirmDelete = async () => {
         if (!token) {
-            toast.error("Authentication token not found.");
+            toast.error("Usuário não autenticado.");
             return;
         }
 
@@ -61,16 +61,15 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
             });
 
             if (response.ok) {
-                toast.success("Post deleted successfully");
+                toast.success("Post deletado com sucesso!");
                 if (onPostDeleted) {
                     onPostDeleted(post.id);
                 }
             } else {
-                const errorData = await response.json();
-                toast.error(errorData.message || "Failed to delete post");
+                toast.error("Erro ao deletar post");
             }
         } catch (error) {
-            toast.error("Error deleting post: " + error.message);
+            toast.error("Erro ao deletar post");
         } finally {
             setDeleteModalOpen(false);
         }
@@ -83,7 +82,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
 
     const handleSaveEdit = async (newContent, newPublico) => {
         if (!token) {
-            toast.error("Não autenticado.");
+            toast.error("Usuário não autenticado.");
             return;
         }
 

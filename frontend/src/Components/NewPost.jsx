@@ -70,6 +70,7 @@ const NewPost = ({ onNewPost }) => {
                 }
                 throw new Error(errorMsg);
             }
+            toast.success("Post feito com sucesso!");
             setFormData({ conteudo: '', publico: false, imagem: null });
             setPreview(null);
             if (imageInputRef.current) {
