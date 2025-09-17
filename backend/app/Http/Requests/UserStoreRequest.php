@@ -44,7 +44,7 @@ class UserStoreRequest extends FormRequest
             'password.required' => 'A senha é obrigatória.',
             'password.confirmed' => 'A confirmação da senha não corresponde.',
             'password.min' => 'A senha deve ter no mínimo 8 caracteres.',
-            'password.mixedCase' => 'A senha deve conter letras maiúsculas e minúsculas.',
+            'password.mixed' => 'A senha deve conter letras maiúsculas e minúsculas.',
             'password.letters' => 'A senha deve conter letras.',
             'password.numbers' => 'A senha deve conter números.',
             'password.symbols' => 'A senha deve conter pelo menos um caractere especial.',
