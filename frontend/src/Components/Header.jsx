@@ -1,9 +1,6 @@
 import React, { useContext, useState } from 'react';
-import UserAvatar from './UserAvatar';
 import { NavigationContext } from '../Contexts/NavigationContext';
 import { AppContext } from '../Contexts/AppContext';
-import { toast } from 'react-toastify';
-import { CircleUserRound } from 'lucide-react';
 import LoaderPages from './LoaderPages/LoaderPages';
 import handleLogout from '../Utils/handleLogout';
 
