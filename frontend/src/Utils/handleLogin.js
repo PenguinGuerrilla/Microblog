@@ -1,11 +1,5 @@
 import { toast } from 'react-toastify';
-import { z } from 'zod';
-
-
-const loginSchema = z.object({
-    email: z.string().email("Por favor, insira um e-mail válido."),
-    password: z.string().min(1, "A senha não pode estar em branco."),
-});
+import { loginSchema } from './Schemas/loginSchema';
 
 
 const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser, navigate) => {
