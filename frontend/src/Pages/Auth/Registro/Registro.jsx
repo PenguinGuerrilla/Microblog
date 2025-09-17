@@ -9,6 +9,7 @@ import { NavigationContext } from "../../../Contexts/NavigationContext";
 import Header from "../../../Components/Header";
 import LoaderPages from "../../../Components/LoaderPages/LoaderPages";
 import handleLogin from "../../../Utils/handleLogin";
+import handleRegister from "../../../Utils/handleRegister";
 
 export default function Registro() {
     const { navigate } = useContext(NavigationContext);
@@ -51,7 +52,7 @@ export default function Registro() {
                             <h1 className="text-3xl md:text-4xl font-bold">Crie sua conta</h1>
                         </div>
 
-                        <form onSubmit={e => handleRegister(e)} className="space-y-5">
+                        <form onSubmit={e => handleRegister(e,setLoading,formData,setErrors,setToken,setUser,navigate)} className="space-y-5">
                             <div>
                                 <input
                                     type="text"
