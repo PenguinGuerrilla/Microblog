@@ -8,10 +8,11 @@ import { NavigationContext } from "../../../Contexts/NavigationContext";
 
 import Header from "../../../Components/Header";
 import LoaderPages from "../../../Components/LoaderPages/LoaderPages";
+import handleLogin from "../../../Utils/handleLogin";
 
 export default function Registro() {
     const { navigate } = useContext(NavigationContext);
-    const { setToken } = useContext(AppContext);
+    const { setToken, setUser } = useContext(AppContext);
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         name: '',
@@ -64,13 +65,14 @@ export default function Registro() {
                     toast.error(result.message || "Ocorreu um erro desconhecido.");
                 }
             } else {
-                toast.success(("Registrado com sucesso!") + " Redirecionando a página...", {
+                toast.success(("Registrado com sucesso!"), {
                     autoClose: 1500,
                     closeOnClick: false,
                     onClose: () => {
-                        localStorage.setItem('token', result.data.token);
-                        setToken(result.data.token);
-                        navigate('/'); 
+                        handleLogin(
+                            e, { email: formData.email, password: formData.password },
+                            setErrors, setLoading, setToken, setUser, navigate
+                        )
                     }
                 });
             }
@@ -87,7 +89,6 @@ export default function Registro() {
 
         setFormData(f => ({ ...f, [attr]: finalValue }));
 
-        // Clear errors for the field being edited
         if (errors[attr]) {
             setErrors(er => {
                 const { [attr]: _, ...remainErrors } = er;
@@ -108,8 +109,7 @@ export default function Registro() {
                             <h1 className="text-3xl md:text-4xl font-bold">Crie sua conta</h1>
                         </div>
 
-                        <form onSubmit={handleRegister} className="space-y-5">
-                            {/* Name Input */}
+                        <form onSubmit={e => handleRegister(e)} className="space-y-5">
                             <div>
                                 <input
                                     type="text"
@@ -123,7 +123,6 @@ export default function Registro() {
                                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
                             </div>
 
-                            {/* Email Input */}
                             <div>
                                 <input
                                     type="email"
@@ -138,7 +137,6 @@ export default function Registro() {
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
                             </div>
 
-                            {/* Password Input */}
                             <div>
                                 <input
                                     type="password"
@@ -153,7 +151,6 @@ export default function Registro() {
                                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
                             </div>
 
-                            {/* Confirm Password Input */}
                             <div>
                                 <input
                                     type="password"
@@ -168,7 +165,6 @@ export default function Registro() {
                                 {errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation[0]}</p>}
                             </div>
 
-                            {/* Submit Button */}
                             <div>
                                 <button
                                     type="submit"
@@ -178,7 +174,6 @@ export default function Registro() {
                                 </button>
                             </div>
 
-                            {/* Login Link */}
                             <div className="text-center">
                                 <p className="text-sm text-[#96C4A8]">
                                     Já tem uma conta?{' '}
