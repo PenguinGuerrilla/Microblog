@@ -53,6 +53,7 @@ const LoginPage = () => {
                                     placeholder="Username or email"
                                     value={formData.email}
                                     onChange={updateAttr}
+                                    maxLength={80}
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                             </div>
@@ -63,6 +64,7 @@ const LoginPage = () => {
                                     placeholder="Password"
                                     value={formData.password}
                                     onChange={updateAttr}
+                                    maxLength={80}
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                             </div>

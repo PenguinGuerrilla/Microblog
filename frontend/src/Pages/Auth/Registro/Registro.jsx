@@ -58,6 +58,7 @@ export default function Registro() {
                                     onChange={updateAttr}
                                     placeholder="Nome completo"
                                     required
+                                    maxLength={80}
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.name ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
@@ -72,6 +73,8 @@ export default function Registro() {
                                     placeholder="Email"
                                     autoComplete="email"
                                     required
+                                    maxLength={80}
+
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
@@ -86,6 +89,8 @@ export default function Registro() {
                                     placeholder="Senha"
                                     autoComplete="new-password"
                                     required
+                                    maxLength={80}
+
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
@@ -100,6 +105,8 @@ export default function Registro() {
                                     placeholder="Confirmação de senha"
                                     autoComplete="new-password"
                                     required
+                                    maxLength={80}
+
                                     className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password_confirmation ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation[0]}</p>}
