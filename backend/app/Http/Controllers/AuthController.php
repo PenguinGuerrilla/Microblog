@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserStoreRequest;
-use App\Models\User;
 use App\Services\ApiResponse;
 use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 class AuthController extends Controller
 {
 
@@ -44,7 +43,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
-        return ApiResponse::success('Logout efetuado com sucesso.');
+        try {
+            $this->authService->logout($request);
+            return ApiResponse::success('Logout efetuado com sucesso.');
+        } catch (Exception $e) {
+            return ApiResponse::error('Erro ao efetuar o logout.');
+        }
     }
 }

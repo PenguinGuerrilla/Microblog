@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AuthService{
@@ -34,5 +35,9 @@ class AuthService{
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function logout(Request $request){
+        $request->user()->tokens()->delete();
     }
 }
