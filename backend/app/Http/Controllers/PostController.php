@@ -59,9 +59,11 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $post = Post::create($data);
-            $file = $data['imagem'];
-            $path = $file->store('images', 'public');
-            $post->images()->create(["path" => $path]);
+            if(isset($data['imagem'])){
+                $file = $data['imagem'];
+                $path = $file->store('images', 'public');
+                $post->images()->create(["path" => $path]);
+            }
             DB::commit();
             return ApiResponse::success($post);
         } catch (Exception $e) {
@@ -102,7 +104,7 @@ class PostController extends Controller
             return ApiResponse::success($post);
         } catch (Exception $e) {
             DB::rollBack();
-            return ApiResponse::error("Erro ao editar post");
+            return ApiResponse::error("Erro ao editar post: ".$e);
         }
     }
 
