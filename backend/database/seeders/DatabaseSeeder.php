@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         DB::beginTransaction();
         try{
             $this->call( UserSeeder::class);
+            $this->call( PostSeeder::class);
             DB::commit();
         }catch(Exception $e){
             DB::rollBack();
