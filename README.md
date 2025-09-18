@@ -45,6 +45,7 @@ Esta é uma aplicação de microblog full-stack com backend em Laravel e fronten
     php artisan key:generate
     php artisan storage:link
     php artisan migrate
+    php artisan db:seed
     ```
     **Importante:** Abra o arquivo `.env` e defina a variável `APP_URL` para o endereço da sua aplicação (ex: `APP_URL=http://127.0.0.1:8000`). **Não utilize `localhost`**, pois isso pode causar problemas na exibição das imagens.
 
