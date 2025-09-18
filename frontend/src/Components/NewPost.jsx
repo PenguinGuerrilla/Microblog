@@ -100,11 +100,17 @@ const NewPost = ({ onNewPost }) => {
                     <textarea
                         name="conteudo"
                         value={formData.conteudo}
-                        onChange={(e) => handleChangeAttr('conteudo', e.target.value)}
-                        className="flex-grow border-none resize-none placeholder-[#96c4a8] text-white"
+                        onChange={(e) => {
+                            handleChangeAttr('conteudo', e.target.value);
+                            const textarea = e.target;
+                            textarea.style.height = 'auto';
+                            textarea.style.height = textarea.scrollHeight + 'px';
+                        }}
+                        className="flex-grow border-none resize-none placeholder-[#96c4a8] text-white overflow-hidden focus:outline-none focus:ring-0"
                         placeholder="O que está acontecendo?"
                         rows="2"
                         maxLength="280"
+                        style={{ minHeight: '48px', maxHeight: '300px' }}
                     ></textarea>
                 </div>
 
