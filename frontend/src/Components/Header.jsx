@@ -29,9 +29,9 @@ const Header = ({ showAuthControls = false }) => {
       <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
         <img
           src={"/logo.svg"}
-          className="w-5 h-5 rounded-full mt-2 mr-3"
+          className="w-5 h-5 rounded-full mr-3"
         />
-        <span className="font-semibold text-lg md:text-xl">Microblog</span>
+        <span className="font-bold text-white text-lg font- md:text-xl">Microblog</span>
       </div>
       {showAuthControls && (
         <div className="flex items-center space-x-4">
