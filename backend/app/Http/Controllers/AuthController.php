@@ -6,47 +6,44 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use App\Services\ApiResponse;
+use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
+
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function login(LoginRequest $request)
     {
         $data = $request->validated();
-
-        $email = $data['email'];
-        $password = $data['password'];
-
-        $attempt = auth()->attempt(['email' => $email, 'password' => $password]);
-
-        if (!$attempt) {
+        try {
+            $loggedUser = $this->authService->login($data);
+            return ApiResponse::success($loggedUser);
+        }catch(Exception $e){
             return ApiResponse::unauthorized();
         }
-
-        $user = auth()->user();
-        $token = $user->createToken($user->name, ['*'], now()->addHour())->plainTextToken;
-
-        return ApiResponse::success([
-            'user' => $user,
-            'token' => $token
-        ]);
     }
 
-    public function register(UserStoreRequest $request){
+    public function register(UserStoreRequest $request)
+    {
         $data = $request->validated();
-        DB::beginTransaction();
-        try {
-            $user = User::create($data);
-            DB::commit();
+        try{
+            $user = $this->authService->register($data);
             return ApiResponse::success($user);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return ApiResponse::error('Erro ao cadastrar usuário');
+        }catch(Exception $e){
+            return ApiResponse::error("Erro ao cadastrar usuário.");
         }
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->tokens()->delete();
         return ApiResponse::success('Logout efetuado com sucesso.');
     }
