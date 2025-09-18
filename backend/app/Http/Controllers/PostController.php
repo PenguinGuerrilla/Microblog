@@ -20,8 +20,8 @@ class PostController extends Controller
     public function publicPosts()
     {
         $posts = Post::with('user', 'images')->where('publico', true)->orderByDesc('created_at')->get();
-        $posts->each(function($post){
-            if($post->images->isNotEmpty()){
+        $posts->each(function ($post) {
+            if ($post->images->isNotEmpty()) {
                 $post->image = $post->images->first();
             }
             unset($post->images);
@@ -32,10 +32,10 @@ class PostController extends Controller
     public function index()
     {
         try {
-            if (auth()->user()){
+            if (auth()->user()) {
                 $posts = Post::with('user', 'images')->orderByDesc('created_at')->get();
-                $posts->each(function($post){
-                    if($post->images->isNotEmpty()){
+                $posts->each(function ($post) {
+                    if ($post->images->isNotEmpty()) {
                         $post->image = $post->images->first();
                     }
                     unset($post->images);
@@ -59,15 +59,9 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $post = Post::create($data);
-            if($data['imagem']){
-                $file = $data['imagem'];
-                if($data['publico']){
-                    $path = $file->store('images', 'public');
-                }else{
-                    $path = $file->store('images');
-                }
-                $post->images()->create(["path" => $path]);
-            }
+            $file = $data['imagem'];
+            $path = $file->store('images', 'public');
+            $post->images()->create(["path" => $path]);
             DB::commit();
             return ApiResponse::success($post);
         } catch (Exception $e) {
