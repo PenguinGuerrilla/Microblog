@@ -2,6 +2,7 @@ import { ImagePlus, X } from 'lucide-react';
 import React, { useState, useContext, useRef } from 'react';
 import { AppContext } from '../Contexts/AppContext';
 import LoaderPages from './LoaderPages/LoaderPages';
+import { toast } from 'react-toastify';
 
 const NewPost = ({ onNewPost }) => {
     const { token, user } = useContext(AppContext);
@@ -37,7 +38,7 @@ const NewPost = ({ onNewPost }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!user) {
-            alert("Você precisa estar logado para postar.");
+            toast.error("Você precisa estar logado para postar.");
             return;
         }
 
@@ -79,7 +80,7 @@ const NewPost = ({ onNewPost }) => {
             }
         } catch (error) {
             console.error("Submit Error:", error);
-            alert(error.toString());
+            toast.error("Erro ao criar post");
         } finally {
             setLoading(false);
         }
@@ -142,7 +143,15 @@ const NewPost = ({ onNewPost }) => {
                     </div>
                     <div className="flex items-center space-x-4">
                         <span className="text-sm text-gray-400">{formData.conteudo.length}/280</span>
-                        <button type='submit' className="px-5 py-2 bg-[#6ee7b7] text-[#122a21] font-bold rounded-full hover:bg-[#5ce1a7] transition-colors duration-300">
+                        <button
+                            type='submit'
+                            disabled={formData.conteudo === ''}
+                            className={`px-5 py-2 font-bold rounded-full transition-colors duration-300 ${
+                                formData.conteudo === ''
+                                    ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                                    : 'bg-[#6ee7b7] text-[#122a21] hover:bg-[#5ce1a7]'
+                            }`}
+                        >
                             Postar
                         </button>
                     </div>
