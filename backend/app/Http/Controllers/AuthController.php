@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use App\Services\ApiResponse;
@@ -10,15 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $data = $request->validated();
 
-        $email = $request->email;
-        $password = $request->password;
+        $email = $data['email'];
+        $password = $data['password'];
 
         $attempt = auth()->attempt(['email' => $email, 'password' => $password]);
 
