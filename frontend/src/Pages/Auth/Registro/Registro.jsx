@@ -44,12 +44,12 @@ export default function Registro() {
                 <Header showAuthControls={false} />
 
                 <main className="flex-grow flex items-center justify-center w-full">
-                    <div className="w-full max-w-md">
+                    <div className="w-full max-w-md px-4">
                         <div className="text-center mb-8">
                             <h1 className="text-3xl md:text-4xl font-bold">Crie sua conta</h1>
                         </div>
 
-                        <form onSubmit={e => handleRegister(e,setLoading,formData,setErrors,setToken,setUser,navigate)} className="space-y-5">
+                        <form onSubmit={e => handleRegister(e, setLoading, formData, setErrors, setToken, setUser, navigate)} className="space-y-5">
                             <div>
                                 <input
                                     type="text"
@@ -59,7 +59,7 @@ export default function Registro() {
                                     placeholder="Nome completo"
                                     required
                                     maxLength={80}
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.name ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.name ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
                             </div>
@@ -75,7 +75,7 @@ export default function Registro() {
                                     required
                                     maxLength={80}
 
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
                             </div>
@@ -91,7 +91,7 @@ export default function Registro() {
                                     required
                                     maxLength={80}
 
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
                             </div>
@@ -107,7 +107,7 @@ export default function Registro() {
                                     required
                                     maxLength={80}
 
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password_confirmation ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password_confirmation ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                                 {errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation[0]}</p>}
                             </div>
@@ -115,19 +115,19 @@ export default function Registro() {
                             <div>
                                 <button
                                     type="submit"
-                                    className="w-full p-3 bg-[#38E07A] text-[#122117] font-bold rounded-full hover:bg-opacity-90 transition-all duration-300"
+                                    className="w-full p-3 mt-9 bg-[#38E07A] text-[#122117] font-bold rounded-full hover:bg-opacity-90 transition-all duration-300"
                                 >
                                     Cadastrar
                                 </button>
                             </div>
 
-                            <div className="text-center">
+                            <div className="text-center ">
                                 <p className="text-sm text-[#96C4A8]">
                                     Já tem uma conta?{' '}
                                     <button
                                         type="button"
                                         onClick={() => navigate("/login")}
-                                        className="font-bold text-white hover:underline focus:outline-none"
+                                        className="font-bold  text-[#96C4A8] hover:underline focus:outline-none"
                                     >
                                         Faça login
                                     </button>

@@ -118,7 +118,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
 
     return (
         <>
-            <div key={post.id} className="bg-[#1a382e] p-5 rounded-xl shadow-lg">
+            <div key={post.id} className="p-5 rounded-xl">
                 <div className="flex items-start space-x-4">
                     <img
                         src={post.user.gravatar}
@@ -126,17 +126,23 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                         className="w-10 h-10 rounded-full"
                     />
                     <div className="flex-grow min-w-0">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="font-semibold text-lg">{post.user.name}</span>
+                        <div className="flex items-center justify-start mb-2">
+                            <span className="font-bold mr-4 text-lg text-white">{post.user.name}</span>
                             <div className="flex items-center space-x-3">
-                                <span className="text-sm text-gray-400">{timeAgo(post.created_at)}</span>
+                                <span className="text-sm text-[#96C4A8]">{timeAgo(post.created_at)}</span>
                                 {user && user.id == post.user.id ? (
-                                    <div className="flex items-center space-x-2">
-                                        <div onClick={handleEditClick} className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
-                                            <Pencil size={16} />
+                                    <div className="flex items-center space-x-3">
+                                        <div
+                                            onClick={handleEditClick}
+                                            className="bg-[#264533] p-2 rounded-full cursor-pointer transition-colors duration-200 hover:bg-[#6e6d3a]"
+                                        >
+                                            <Pencil size={15} />
                                         </div>
-                                        <div onClick={handleDeleteClick} className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
-                                            <Trash2Icon size={16} />
+                                        <div
+                                            onClick={handleDeleteClick}
+                                            className="bg-[#264533] p-2 rounded-full cursor-pointer transition-colors duration-200 hover:bg-[#6e3a3a]"
+                                        >
+                                            <Trash2Icon size={15} />
                                         </div>
                                     </div>
                                 ) : ('')}

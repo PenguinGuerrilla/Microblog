@@ -38,7 +38,7 @@ const LoginPage = () => {
             <div className="bg-[#122117] min-h-screen flex flex-col font-sans text-white ">
                 <Header showAuthControls={false} />
                 <main className="flex-grow flex items-center justify-center w-full">
-                    <div className="w-full max-w-sm px-4">
+                    <div className="w-full max-w-md px-4">
                         <div className="text-center mb-10">
                             <h1 className="text-4xl font-bold">Log in</h1>
                         </div>
@@ -54,7 +54,7 @@ const LoginPage = () => {
                                     value={formData.email}
                                     onChange={updateAttr}
                                     maxLength={80}
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.email ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                             </div>
                             <div>
@@ -65,7 +65,7 @@ const LoginPage = () => {
                                     value={formData.password}
                                     onChange={updateAttr}
                                     maxLength={80}
-                                    className={`w-full p-4 bg-[#1C3024] border rounded-lg placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
+                                    className={`w-full p-4 bg-[#1C3024] border rounded-xl placeholder-[#96C4A8] text-white focus:outline-none focus:ring-2 focus:ring-[#38E07A] transition-colors ${errors.password ? 'border-red-500' : 'border-[#366347]'}`}
                                 />
                             </div>
                             <button
@@ -82,7 +82,7 @@ const LoginPage = () => {
                                 <button
                                     type="button"
                                     onClick={() => navigate("/registro")}
-                                    className="font-bold text-white hover:underline focus:outline-none"
+                                    className="font-bold text-[#96C4A8] hover:underline focus:outline-none"
                                 >
                                     Cadastre-se
                                 </button>

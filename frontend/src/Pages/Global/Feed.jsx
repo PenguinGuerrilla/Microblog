@@ -76,7 +76,7 @@ const Feed = () => {
         <Header showAuthControls={true} />
 
         <main className="flex-grow flex justify-center p-4 md:p-6">
-          <div className="w-full max-w-xl">
+          <div className="w-full max-w-5xl">
             <h1 className="text-3xl md:text-4xl text-white text-start font-bold mb-6">Início</h1>
 
             {token && <NewPost token={token} onNewPost={fetchPosts} />}

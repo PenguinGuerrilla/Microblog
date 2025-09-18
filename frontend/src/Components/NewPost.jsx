@@ -90,7 +90,7 @@ const NewPost = ({ onNewPost }) => {
         <>
         {loading && <LoaderPages/>}
         <form onSubmit={handleSubmit}>
-            <div className="bg-[#1a382e] p-5 rounded-xl shadow-lg mb-8">
+            <div className="bg-[#1C3024] p-5 rounded-xl shadow-lg mb-8 border-1 border-[#366347]">
                 <div className="flex items-center space-x-4 mb-4">
                     <img
                     src={user.gravatar}
@@ -101,7 +101,7 @@ const NewPost = ({ onNewPost }) => {
                         name="conteudo"
                         value={formData.conteudo}
                         onChange={(e) => handleChangeAttr('conteudo', e.target.value)}
-                        className="flex-grow bg-[#1a382e] border-none focus:ring-0 resize-none placeholder-gray-400 text-[#e0f2e9]"
+                        className="flex-grow border-none resize-none placeholder-[#96c4a8] text-white"
                         placeholder="O que está acontecendo?"
                         rows="2"
                         maxLength="280"
@@ -123,7 +123,7 @@ const NewPost = ({ onNewPost }) => {
 
                 <div className="flex items-center justify-between pt-4 border-t border-[#2a4a3e]">
                     <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2 text-sm text-gray-400">
+                        <div className="flex items-center space-x-2 text-sm text-white">
                             <span>Postagem pública</span>
                             <div onClick={() => handleChangeAttr('publico', !formData.publico)} className="w-10 h-5 flex items-center bg-[#2a4a3e] rounded-full p-1 cursor-pointer">
                                 <div className={`w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${formData.publico ? 'bg-[#6ee7b7] translate-x-full' : 'bg-gray-400'}`}></div>
@@ -142,14 +142,14 @@ const NewPost = ({ onNewPost }) => {
                         />
                     </div>
                     <div className="flex items-center space-x-4">
-                        <span className="text-sm text-gray-400">{formData.conteudo.length}/280</span>
+                        <span className="text-sm text-[#96c4a8]">{formData.conteudo.length}/280</span>
                         <button
                             type='submit'
                             disabled={formData.conteudo === ''}
                             className={`px-5 py-2 font-bold rounded-full transition-colors duration-300 ${
                                 formData.conteudo === ''
                                     ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
-                                    : 'bg-[#6ee7b7] text-[#122a21] hover:bg-[#5ce1a7]'
+                                    : 'bg-[#38e07a] text-[#122117] hover:bg-[#2bbf65]'
                             }`}
                         >
                             Postar
