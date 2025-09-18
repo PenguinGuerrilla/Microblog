@@ -51,8 +51,6 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
                 toast.error("Erro ao logar.");
             }
         } else {
-            console.log('API Response:', result);
-            console.log('Token from API:', result.data.token);
             setToken(result.data.token);
             setUser(result.data.user);
 

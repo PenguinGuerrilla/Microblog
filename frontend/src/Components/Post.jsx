@@ -79,7 +79,6 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
     const handleEditClick = () => setEditModalOpen(true);
     const handleCloseEditModal = () => setEditModalOpen(false);
 
-    if (post.image) console.log(post.image.url)
 
     const handleSaveEdit = async (newContent, newPublico) => {
         if (!token) {
