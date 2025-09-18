@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Login from './Pages/Auth/Login'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
@@ -9,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>

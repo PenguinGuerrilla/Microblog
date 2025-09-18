@@ -77,7 +77,7 @@ const Feed = () => {
 
         <main className="flex-grow flex justify-center p-4 md:p-6">
           <div className="w-full max-w-xl">
-            <h1 className="text-3xl md:text-4xl text-start font-bold mb-6">Início</h1>
+            <h1 className="text-3xl md:text-4xl text-white text-start font-bold mb-6">Início</h1>
 
             {token && <NewPost token={token} onNewPost={fetchPosts} />}
 
