@@ -30,9 +30,15 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
             },
             body: JSON.stringify(formData),
         });
-
+        
+        if (res.status === 401) {
+            toast.error("E-mail ou senha incorretos.");
+            setLoading(false);
+            return;
+        }
+        
         const result = await res.json();
-        console.log(result)
+        
 
         if (result.message != "success") {
             if (result.errors) {
@@ -42,7 +48,7 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
                     });
                 });
             } else {
-                toast.error(result.message || "Ocorreu um erro desconhecido.");
+                toast.error("Erro ao logar.");
             }
         } else {
             console.log('API Response:', result);
@@ -58,7 +64,9 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
             setTimeout(() => navigate("/"), 1500);
         }
     } catch (error) {
-        toast.error(error.toString());
+        alert(error.status_code)
+        if(error.status_code == 401)
+        toast.error("E-mail ou senha incorretos.");
     } finally {
         setLoading(false)
     }
