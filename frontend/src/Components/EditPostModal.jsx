@@ -18,7 +18,7 @@ const EditPostModal = ({ isOpen, onClose, onSave, postContent, isPublic }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center h-full justify-center z-50">
             <div className="bg-[#1a382e] p-5 rounded-xl shadow-lg max-w-lg w-full">
                 <h2 className="text-xl font-semibold text-white mb-4">Editar Post</h2>
                 <textarea

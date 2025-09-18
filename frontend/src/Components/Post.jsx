@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [isImageModalOpen, setImageModalOpen] = useState(false);
     const { token } = useContext(AppContext);
 
     const timeAgo = (dateString) => {
@@ -149,7 +150,14 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                             </div>
                         </div>
                         <p className="text-[#e0f2e9] text-start break-words">{post.conteudo}</p>
-                        {post.image && <img src={post.image.url} alt="Post image" className="mt-4 rounded-lg max-w-full h-auto" />}
+                        {post.image && (
+                            <img
+                                src={post.image.url}
+                                alt="Post image"
+                                className="mt-4 rounded-lg h-96 w-full object-cover cursor-pointer"
+                                onClick={() => setImageModalOpen(true)}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
@@ -165,6 +173,18 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                 postContent={post.conteudo}
                 isPublic={post.publico}
             />
+            {isImageModalOpen && (
+                <div
+                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)] h-full flex items-center justify-center p-20 z-50"
+                    onClick={() => setImageModalOpen(false)}
+                >
+                    <img
+                        src={post.image.url}
+                        alt="Post image"
+                        className="max-w-full rounded-2xl max-h-full"
+                    />
+                </div>
+            )}
         </>
     )
 }
