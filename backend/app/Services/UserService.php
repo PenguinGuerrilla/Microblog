@@ -33,7 +33,7 @@ class UserService
     public function updateUser($data, $id)
     {
         $user = User::findOrFail($id);
-        if (auth()->user()->id != $user) {
+        if (auth()->user()->id != $user->id) {
             throw new Exception('Só é possível editar o seu usuário');
         }
         DB::beginTransaction();
