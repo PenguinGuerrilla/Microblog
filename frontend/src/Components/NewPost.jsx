@@ -115,14 +115,14 @@ const NewPost = ({ onNewPost }) => {
                 </div>
 
                 {preview && (
-                    <div className="relative mb-4">
-                        <img src={preview} alt="Preview" className="rounded-lg max-h-60 w-full object-cover" />
+                    <div className="relative ml-14 mb-4">
+                        <img src={preview} alt="Preview" className="rounded-lg h-60 w-60  object-cover" />
                         <button
                             type="button"
                             onClick={removeImage}
-                            className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-1 text-white hover:bg-opacity-75"
+                            className="absolute top-2 left-51 z-10 bg-black bg-opacity-50 rounded-full p-1  text-white hover:bg-opacity-75"
                         >
-                            <X size={20} />
+                            <X size={20} className='cursor-pointer'/>
                         </button>
                     </div>
                 )}
