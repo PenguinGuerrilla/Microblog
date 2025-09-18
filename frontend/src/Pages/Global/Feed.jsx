@@ -57,7 +57,7 @@ const Feed = () => {
       }
     } catch (error) {
       console.error("Fetch Data Error:", error);
-      alert(error.toString());
+      toast.error("Erro ao buscar posts");
     } finally {
       setLoading(false)
     }

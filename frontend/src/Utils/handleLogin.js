@@ -36,7 +36,7 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
             setLoading(false);
             return;
         }
-        
+
         const result = await res.json();
         
 
@@ -64,7 +64,6 @@ const handleLogin = async (e, formData, setErrors, setLoading, setToken, setUser
             setTimeout(() => navigate("/"), 1500);
         }
     } catch (error) {
-        alert(error.status_code)
         if(error.status_code == 401)
         toast.error("E-mail ou senha incorretos.");
     } finally {
