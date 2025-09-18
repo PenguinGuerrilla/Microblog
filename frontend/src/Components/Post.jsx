@@ -78,11 +78,11 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
     const handleEditClick = () => setEditModalOpen(true);
     const handleCloseEditModal = () => setEditModalOpen(false);
 
-    if(post.image) console.log(post.image.url)
+    if (post.image) console.log(post.image.url)
 
     const handleSaveEdit = async (newContent, newPublico) => {
         if (!token) {
-            toast.error("Authentication token not found.");
+            toast.error("Não autenticado.");
             return;
         }
 
@@ -102,16 +102,15 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
             });
 
             if (response.ok) {
-                toast.success("Post updated successfully");
+                toast.success("Post atualizado com sucesso!");
                 if (onPostUpdated) {
                     onPostUpdated();
                 }
             } else {
-                const errorData = await response.json();
-                toast.error(errorData.message || "Failed to update post");
+                toast.error("Erro ao atualizar post");
             }
         } catch (error) {
-            toast.error("Error updating post: " + error.message);
+            toast.error("Erro ao atualizar post");
         } finally {
             setEditModalOpen(false);
         }
@@ -140,7 +139,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                                             <Trash2Icon size={16} />
                                         </div>
                                     </div>
-                                   ) : ('')}
+                                ) : ('')}
                             </div>
                         </div>
                         <p className="text-[#e0f2e9] text-start break-words">{post.conteudo}</p>
