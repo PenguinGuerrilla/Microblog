@@ -4,129 +4,79 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
-use App\Models\Post;
-use App\Models\PostImage;
 use App\Services\ApiResponse;
+use App\Services\PostService;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
 
     public function publicPosts()
     {
-        $posts = Post::with('user', 'images')->where('publico', true)->orderByDesc('created_at')->get();
-        $posts->each(function ($post) {
-            if ($post->images->isNotEmpty()) {
-                $post->image = $post->images->first();
-            }
-            unset($post->images);
-        });
-        return ApiResponse::success($posts);
+        try {
+            $posts = $this->postService->getPublicPosts();
+            return ApiResponse::success($posts);
+        } catch (Exception $e) {
+            return ApiResponse::error('Erro ao buscar os posts');
+        }
     }
 
     public function index()
     {
         try {
             if (auth()->user()) {
-                $posts = Post::with('user', 'images')->orderByDesc('created_at')->get();
-                $posts->each(function ($post) {
-                    if ($post->images->isNotEmpty()) {
-                        $post->image = $post->images->first();
-                    }
-                    unset($post->images);
-                });
+                $posts = $this->postService->getUserPosts();
                 return ApiResponse::success($posts);
             }
+            return ApiResponse::error('Não autorizado');
         } catch (Exception $e) {
-            return ApiResponse::error('Erro ao buscar os posts: ' . $e);
+            return ApiResponse::error('Erro ao buscar os posts');
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(PostStoreRequest $request)
     {
-        $data = $request->validated();
-        if ($data['user_id'] != auth()->user()->id)
-            return ApiResponse::error("Erro ao cadastrar post");
-
-        DB::beginTransaction();
         try {
-            $post = Post::create($data);
-            if(isset($data['imagem'])){
-                $file = $data['imagem'];
-                $path = $file->store('images', 'public');
-                $post->images()->create(["path" => $path]);
-            }
-            DB::commit();
+            $post = $this->postService->storePost($request->validated());
             return ApiResponse::success($post);
         } catch (Exception $e) {
-            DB::rollBack();
             return ApiResponse::error("Erro ao cadastrar post");
         }
-
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         try {
-            if (auth()->user())
-                return ApiResponse::success(Post::where('user_id', $id));
-            else
-                return ApiResponse::success(Post::where('publico', true)->where('user_id', $id));
+            $posts = $this->postService->getPostsByUser($id);
+            return ApiResponse::success($posts);
         } catch (Exception $e) {
-            return ApiResponse::error('Erro ao buscar os posts: ' . $e);
+            return ApiResponse::error('Erro ao buscar os posts');
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(PostUpdateRequest $request, string $id)
     {
-        $data = $request->validated();
-        $post = Post::find($id);
-        if ($data['user_id'] != auth()->user()->id || $post->user_id != auth()->user()->id)
-            return ApiResponse::error("Erro ao editar post");
-        DB::beginTransaction();
         try {
-            $post->update($data);
-            DB::commit();
+            $post = $this->postService->updatePost($request->validated(), $id);
             return ApiResponse::success($post);
         } catch (Exception $e) {
-            DB::rollBack();
-            return ApiResponse::error("Erro ao editar post: ".$e);
+            return ApiResponse::error("Erro ao atualizar post");
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        // dd(auth()->user()->id,$id);
-        $post = Post::find($id);
-        if ($post->user_id != auth()->user()->id)
+        try {
+            $this->postService->destroyPost($id);
+            return ApiResponse::success("Post excluído com sucesso");
+        } catch (Exception $e) {
             return ApiResponse::error("Erro ao excluir post");
-        else {
-            DB::beginTransaction();
-            try {
-                Post::find($id)->delete();
-                DB::commit();
-                return ApiResponse::success("Post excluído com sucesso");
-            } catch (Exception $e) {
-                DB::rollBack();
-                return ApiResponse::error("Erro ao excluir post");
-            }
         }
     }
 }
