@@ -126,12 +126,12 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                         alt={post.user.name}
                         className="w-10 h-10 rounded-full"
                     />
-                    <div className="flex-grow">
+                    <div className="flex-grow min-w-0">
                         <div className="flex items-center justify-between mb-2">
                             <span className="font-semibold text-lg">{post.user.name}</span>
                             <div className="flex items-center space-x-3">
                                 <span className="text-sm text-gray-400">{timeAgo(post.created_at)}</span>
-                                {user && user.id == post.user.id ?
+                                {user && user.id == post.user.id ? (
                                     <div className="flex items-center space-x-2">
                                         <div onClick={handleEditClick} className="bg-[#2a483e] p-1 rounded-full cursor-pointer">
                                             <Pencil size={16} />
@@ -140,10 +140,10 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                                             <Trash2Icon size={16} />
                                         </div>
                                     </div>
-                                    : ''}
+                                   ) : ('')}
                             </div>
                         </div>
-                        <p className="text-[#e0f2e9] text-start">{post.conteudo}</p>
+                        <p className="text-[#e0f2e9] text-start break-words">{post.conteudo}</p>
                         {post.image && <img src={post.image.url} alt="Post image" className="mt-4 rounded-lg max-w-full h-auto" />}
                     </div>
                 </div>
