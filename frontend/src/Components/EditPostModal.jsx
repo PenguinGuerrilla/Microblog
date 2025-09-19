@@ -5,21 +5,27 @@ const EditPostModal = ({ isOpen, onClose, onSave, postContent, isPublic }) => {
     const [publico, setPublico] = useState(isPublic);
 
     useEffect(() => {
-        setContent(postContent);
-        setPublico(isPublic);
-    }, [postContent, isPublic, isOpen]);
-
-    if (!isOpen) {
-        return null;
-    }
+        if (isOpen) {
+            setContent(postContent);
+            setPublico(isPublic);
+        }
+    }, [isOpen, postContent, isPublic]);
 
     const handleSave = () => {
         onSave(content, publico);
     };
 
     return (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center h-full justify-center z-50">
-            <div className="bg-[#1a382e] p-5 rounded-xl shadow-lg max-w-lg w-full">
+        <div
+            className={`fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center h-full justify-center z-50 transition-opacity duration-300 ease-in-out ${
+                isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+        >
+            <div
+                className={`bg-[#1a382e] p-5 rounded-xl shadow-lg max-w-lg w-full transform transition-all duration-300 ease-in-out ${
+                    isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+                }`}
+            >
                 <h2 className="text-xl font-semibold text-white mb-4">Editar Post</h2>
                 <textarea
                     value={content}

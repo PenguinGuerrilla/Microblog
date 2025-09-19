@@ -171,18 +171,17 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                 postContent={post.conteudo}
                 isPublic={post.publico}
             />
-            {isImageModalOpen && (
-                <div
-                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)] h-full flex items-center justify-center p-20 z-50"
-                    onClick={() => setImageModalOpen(false)}
-                >
-                    <img
-                        src={post.image.url}
-                        alt="Post image"
-                        className="max-w-full rounded-2xl max-h-full"
-                    />
-                </div>
-            )}
+            <div
+                className={`fixed inset-0 bg-[rgba(0,0,0,0.5)] h-full flex items-center justify-center p-4 sm:p-20 z-50 transition-opacity duration-300 ease-in-out ${isImageModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setImageModalOpen(false)}
+            >
+                <img
+                    src={post.image?.url}
+                    alt="Post image"
+                    className={`max-w-full rounded-2xl max-h-full transform transition-all duration-300 ease-in-out ${isImageModalOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+                    onClick={(e) => e.stopPropagation()}
+                />
+            </div>
         </>
     )
 }
