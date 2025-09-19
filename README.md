@@ -29,6 +29,23 @@ Esta é uma aplicação de microblog full-stack com backend em Laravel e fronten
 *   Node.js
 *   NPM
 
+### Extensões PHP Necessárias
+
+Certifique-se de que as seguintes extensões do PHP estejam habilitadas em seu ambiente para garantir o funcionamento correto do projeto:
+
+- `curl`
+- `exif`
+- `fileinfo`
+- `gd`
+- `intl`
+- `mbstring`
+- `mysqli`
+- `openssl`
+- `pdo_pgsql` ou `pdo_mysql`
+- `xsl`
+
+Outras extensões podem ser necessárias dependendo de funcionalidades específicas ou do ambiente de desenvolvimento. Consulte a documentação do Laravel e do PHP caso encontre mensagens de erro relacionadas a extensões ausentes.
+
 ### Instalação
 
 1.  **Clone o repositório:**
@@ -37,10 +54,11 @@ Esta é uma aplicação de microblog full-stack com backend em Laravel e fronten
     cd Microblog
     ```
 
+
 2.  **Configuração do Backend:**
     ```bash
     cd backend
-    composer install
+    composer update
     cp .env.example .env
     php artisan key:generate
     php artisan storage:link

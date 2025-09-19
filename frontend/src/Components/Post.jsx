@@ -78,7 +78,6 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
     const handleEditClick = () => setEditModalOpen(true);
     const handleCloseEditModal = () => setEditModalOpen(false);
 
-    if (post.image) console.log(post.image.url)
 
     const handleSaveEdit = async (newContent, newPublico) => {
         if (!token) {
@@ -153,7 +152,7 @@ const Post = ({ post, user, onPostDeleted, onPostUpdated }) => {
                             <img
                                 src={post.image.url}
                                 alt="Post image"
-                                className="mt-4 rounded-lg h-96 w-full object-cover cursor-pointer"
+                                className="mt-4 rounded-lg h-100 w-100 object-cover cursor-pointer"
                                 onClick={() => setImageModalOpen(true)}
                             />
                         )}

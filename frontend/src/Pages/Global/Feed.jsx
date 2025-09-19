@@ -37,7 +37,6 @@ const Feed = () => {
       });
       const result = await res.json();
       if (!res.ok) {
-        console.log(res)
         if (res.status == 401) {
           toast.info("Sessão expirada, recarregando a página...")
           handleLogout(setLoading, token, setToken, navigate)

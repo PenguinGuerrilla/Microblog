@@ -2,54 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserStoreRequest;
-use App\Models\User;
 use App\Services\ApiResponse;
+use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 class AuthController extends Controller
 {
-    public function login(Request $request)
+
+    protected $authService;
+
+    public function __construct(AuthService $authService)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $this->authService = $authService;
+    }
 
-        $email = $request->email;
-        $password = $request->password;
-
-        $attempt = auth()->attempt(['email' => $email, 'password' => $password]);
-
-        if (!$attempt) {
+    public function login(LoginRequest $request)
+    {
+        $data = $request->validated();
+        try {
+            $loggedUser = $this->authService->login($data);
+            return ApiResponse::success($loggedUser);
+        }catch(Exception $e){
             return ApiResponse::unauthorized();
         }
-
-        $user = auth()->user();
-        $token = $user->createToken($user->name, ['*'], now()->addHour())->plainTextToken;
-
-        return ApiResponse::success([
-            'user' => $user,
-            'token' => $token
-        ]);
     }
 
-    public function register(UserStoreRequest $request){
+    public function register(UserStoreRequest $request)
+    {
         $data = $request->validated();
-        DB::beginTransaction();
-        try {
-            $user = User::create($data);
-            DB::commit();
+        try{
+            $user = $this->authService->register($data);
             return ApiResponse::success($user);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return ApiResponse::error('Erro ao cadastrar usuário');
+        }catch(Exception $e){
+            return ApiResponse::error("Erro ao cadastrar usuário.");
         }
     }
 
-    public function logout(Request $request){
-        $request->user()->tokens()->delete();
-        return ApiResponse::success('Logout efetuado com sucesso.');
+    public function logout(Request $request)
+    {
+        try {
+            $this->authService->logout($request);
+            return ApiResponse::success('Logout efetuado com sucesso.');
+        } catch (Exception $e) {
+            return ApiResponse::error('Erro ao efetuar o logout.');
+        }
     }
 }

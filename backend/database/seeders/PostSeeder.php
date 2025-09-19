@@ -13,6 +13,11 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
+        $post3 = new Post();
+        $post3->user_id = 1;
+        $post3->conteudo = "Hmmm... Talvez eu deva postar uma imagem hoje!";
+        $post3->publico = true;
+        $post3->save();
         $post1 = new Post();
         $post1->user_id = 2;
         $post1->conteudo = "Estou fazendo um post privado pra dizer que ainda não criei um Gravatar.";
@@ -20,13 +25,8 @@ class PostSeeder extends Seeder
         $post1->save();
         $post2 = new Post();
         $post2->user_id = 3;
-        $post2->conteudo = "Estou fazendo um post público pra dizer que ainda já possuo um Gravatar!";
+        $post2->conteudo = "Estou fazendo um post público pra dizer que já possuo um Gravatar!";
         $post2->publico = true;
         $post2->save();
-        $post3 = new Post();
-        $post3->user_id = 1;
-        $post3->conteudo = "Hmmm... Talvez eu deva postar uma imagem hoje!";
-        $post3->publico = true;
-        $post3->save();
     }
 }

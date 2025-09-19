@@ -6,19 +6,27 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Services\ApiResponse;
+use App\Services\UserService;
 use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use function PHPUnit\Framework\returnArgument;
 
 class UserController extends Controller
 {
+
+
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return ApiResponse::success(User::all());
+        return ApiResponse::success($this->userService->getAllUsers());
     }
 
     /**
@@ -27,13 +35,10 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $data = $request->validated();
-        DB::beginTransaction();
         try {
-            $user = User::create($data);
-            DB::commit();
+            $user = $this->userService->storeUser($data);
             return ApiResponse::success($user);
         } catch (Exception $e) {
-            DB::rollBack();
             return ApiResponse::error('Erro ao cadastrar usuário');
         }
 
@@ -44,10 +49,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
-        if ($user) {
+        try {
+            $user = $this->userService->getUser($id);
             return ApiResponse::success($user);
-        } else {
+        } catch (Exception $e) {
             return ApiResponse::error('Usuário não encontrado');
         }
     }
@@ -55,24 +60,16 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'required|confirmed'
-        ]);
-        DB::beginTransaction();
+        $data = $request->validated();
         try {
-            $user = User::find($id);
-            $user->update($data);
-            DB::commit();
+            $user = $this->userService->updateUser($data, $id);
             return ApiResponse::success([
                 'message' => 'Usuário atualizado com sucesso',
                 'data' => $user
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return ApiResponse::error('Erro ao atualizar usuário');
         }
     }
@@ -82,21 +79,12 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
-        if ($user) {
-            DB::beginTransaction();
-            try {
-                $user->delete();
-                DB::commit();
-                return ApiResponse::success('Usuário excluído com sucesso');
-            } catch (Exception $e) {
-                DB::rollBack();
-                return ApiResponse::error('Erro ao excluir o usuário');
-            }
-        } else {
-            return response()->json([
-                'message' => 'Usuário não encontrado'
-            ], 404);
+        try {
+            $this->userService->deleteUser($id);
+            return ApiResponse::success('Usuário excluído com sucesso');
+        } catch (Exception $e) {
+            return ApiResponse::error('Erro ao excluir o usuário');
+
         }
     }
 }
